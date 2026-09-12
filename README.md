@@ -10,7 +10,7 @@ University of Computer Studies, Yangon, 2025–2026), running on the
 ```bash
 pip install streamlit pandas numpy plotly scikit-learn mlxtend
 cd airline-satisfaction-app
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 The app opens on `http://localhost:8501`.
