@@ -1073,7 +1073,7 @@ def page_predict(df):
                                     key=f"pf_{i}")
         st.markdown("</div>", unsafe_allow_html=True)
 
-        btn = st.button("PREDICT SATISFACTION", use_container_width=True,
+        btn = st.button("PREDICT SATISFACTION", width="stretch",
                         type="primary")
         st.markdown(
             """<style>div[data-testid="stButton"] > button {
