@@ -494,7 +494,7 @@ def page_overview(df):
             texttemplate="%{label}<br>%{percent}", textfont=dict(size=15)))
         fig.add_annotation(text=f"<b>{sat_rate*100:.1f}%</b><br>satisfied",
                            showarrow=False, font=dict(size=22, color="#e6ecf5"))
-        st.plotly_chart(dark_fig(fig, 430, False), use_container_width=True,
+        st.plotly_chart(dark_fig(fig, 430, False), width="stretch",
                         config={"displayModeBar": False})
     with c2:
         m1, m2, m3 = st.columns(3)
@@ -521,12 +521,12 @@ def page_overview(df):
                                              range=[0, float(vc.max()) * 1.55]),
                                   yaxis=dict(autorange="reversed"))
                 st.plotly_chart(dark_fig(fig, 200, False),
-                                use_container_width=True,
+                                width="stretch",
                                 config={"displayModeBar": False})
         st.caption("Exact marginal distributions — matching the notebook's value counts.")
 
     sec("02", "DATA PREVIEW · head(10)")
-    st.dataframe(df.head(10), use_container_width=True, height=270)
+    st.dataframe(df.head(10), width="stretch", height=270)
 
     sec("03", "DATA QUALITY AUDIT")
     dup = meta.get("dup", int(df.duplicated().sum()))
@@ -556,7 +556,7 @@ def page_overview(df):
             "Unique": [df[c].nunique() for c in df.columns],
             "Missing": [int(df[c].isna().sum()) for c in df.columns],
         })
-        st.dataframe(inv, use_container_width=True, height=460)
+        st.dataframe(inv, width="stretch", height=460)
 
 
 # ============================================================
@@ -599,7 +599,7 @@ def page_eda(df):
             fig.update_layout(title=f"Distribution of {pick} by satisfaction",
                               bargap=0.02)
             fig.update_xaxes(title=xlabel)
-            st.plotly_chart(dark_fig(fig, 420), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 420), width="stretch",
                             config={"displayModeBar": False})
         with c2:
             s = df[pick]
@@ -626,7 +626,7 @@ def page_eda(df):
                 rows.append(dict(Field=col, Q1=round(q1v, 1), Q3=round(q3v, 1),
                                  IQR=round(iqr, 1), Lower=round(lo, 1),
                                  Upper=round(hi, 1), Outliers=cnt))
-            st.dataframe(pd.DataFrame(rows), use_container_width=True, height=190)
+            st.dataframe(pd.DataFrame(rows), width="stretch", height=190)
             st.caption("Outliers are inspected but not deleted — extreme flight "
                        "distances and delays are legitimate operational values "
                        "(same decision as the notebook).")
@@ -639,7 +639,7 @@ def page_eda(df):
             fig.update_yaxes(type="log", row=1, col=1)
             fig.update_yaxes(type="log", row=1, col=2)
             fig.update_yaxes(type="log", row=1, col=3)
-            st.plotly_chart(dark_fig(fig, 330, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 330, False), width="stretch",
                             config={"displayModeBar": False})
         with c2:
             sk = df[SKEW_COLS].skew().sort_values(ascending=False)
@@ -651,7 +651,7 @@ def page_eda(df):
             fig.update_layout(title="Skewness (>1 = highly skewed)",
                               margin=dict(l=10, r=52, t=44, b=8),
                               xaxis=dict(range=[-0.6, float(sk.max()) * 1.25]))
-            st.plotly_chart(dark_fig(fig, 330, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 330, False), width="stretch",
                             config={"displayModeBar": False})
             st.caption("Delays are heavily right-skewed; Age is essentially "
                        "symmetric — matching the notebook's skewness panel.")
@@ -671,7 +671,7 @@ def page_eda(df):
             fig.update_layout(title=f"% satisfied · {chosen}",
                               yaxis=dict(tickformat=".0%", range=[0, 1.12]),
                               margin=dict(l=10, r=10, t=44, b=8))
-            st.plotly_chart(dark_fig(fig, 380, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 380, False), width="stretch",
                             config={"displayModeBar": False})
         with c2:
             st.markdown("**Average service ratings — satisfied vs neutral/dissatisfied**")
@@ -686,7 +686,7 @@ def page_eda(df):
             fig.update_layout(barmode="group", height=560,
                               margin=dict(l=10, r=16, t=30, b=8),
                               xaxis=dict(title="mean rating (0–5)"))
-            st.plotly_chart(dark_fig(fig, 560), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 560), width="stretch",
                             config={"displayModeBar": False})
             top = means.index[-1]
             st.caption(f"Largest gap: **{top}** "
@@ -700,7 +700,7 @@ def page_eda(df):
                         color_continuous_scale=["#ef5350", "#141b2d", "#00d4ff"],
                         zmin=-1, zmax=1, width=1000, height=760)
         fig.update_layout(font=dict(size=9))
-        st.plotly_chart(dark_fig(fig, 760, False), use_container_width=True,
+        st.plotly_chart(dark_fig(fig, 760, False), width="stretch",
                         config={"displayModeBar": False})
         st.caption("Departure ↔ Arrival delay correlate near-perfectly; "
                    "Cleanliness ↔ Food & drink / Entertainment form the "
@@ -735,7 +735,7 @@ def page_mining(df):
                                        marker=dict(size=9)))
             fig.update_layout(title="Elbow method · inertia",
                               height=300, margin=dict(t=44))
-            st.plotly_chart(dark_fig(fig, 300, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 300, False), width="stretch",
                             config={"displayModeBar": False})
         with c2:
             fig = go.Figure(go.Bar(
@@ -745,7 +745,7 @@ def page_mining(df):
                                    for k in cl["sils"].keys()])))
             fig.update_layout(title="Silhouette score by K",
                               height=300, margin=dict(t=44))
-            st.plotly_chart(dark_fig(fig, 300, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 300, False), width="stretch",
                             config={"displayModeBar": False})
         with c3:
             best_sil = cl["sils"][cl["best_k"]]
@@ -782,7 +782,7 @@ def page_mining(df):
                               margin=dict(l=10, r=10, t=14, b=8),
                               legend=dict(orientation="h", y=1.12))
             fig.update_xaxes(visible=False)
-            st.plotly_chart(dark_fig(fig, 200, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 200, False), width="stretch",
                             config={"displayModeBar": False})
             for cid in sorted(sizes):
                 md(f"""<div class="mrow"><span class="m-name">Cluster {cid}
@@ -799,7 +799,7 @@ def page_mining(df):
                             y=prof.index, text_auto=".1f")
             fig.update_layout(height=560, margin=dict(l=10, r=10, t=30, b=8))
             fig.update_traces(showscale=False)
-            st.plotly_chart(dark_fig(fig, 560, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 560, False), width="stretch",
                             config={"displayModeBar": False})
         st.caption("Clusters separate on the service-quality axis: the "
                    "low-quality cluster (low entertainment / food / boarding) "
@@ -841,7 +841,7 @@ def page_mining(df):
                 textposition="outside"))
             fig.update_layout(height=380, margin=dict(l=10, r=52, t=20, b=8),
                               yaxis=dict(autorange="reversed"))
-            st.plotly_chart(dark_fig(fig, 380, False), use_container_width=True,
+            st.plotly_chart(dark_fig(fig, 380, False), width="stretch",
                             config={"displayModeBar": False})
         with c2:
             st.markdown("**Top rules by lift**")
@@ -853,7 +853,7 @@ def page_mining(df):
                              "confidence", "lift"]].round(3)
                 show.columns = ["IF (antecedent)", "THEN (consequent)",
                                 "support", "confidence", "lift"]
-                st.dataframe(show, use_container_width=True, height=380)
+                st.dataframe(show, width="stretch", height=380)
             else:
                 st.info("No rules at this threshold — lower support/confidence.")
         st.caption("High service ratings travel together and imply "
@@ -930,7 +930,7 @@ def page_lab(df):
         fig.update_layout(barmode="group", yaxis=dict(range=[0, 1.05],
                                                      tickformat=".0%"),
                           title="Train vs test accuracy", height=330)
-        st.plotly_chart(dark_fig(fig, 330, False), use_container_width=True,
+        st.plotly_chart(dark_fig(fig, 330, False), width="stretch",
                         config={"displayModeBar": False})
     with c2:
         st.markdown("**5-fold stratified CV (train subsample)**")
@@ -954,7 +954,7 @@ def page_lab(df):
             texttemplate="%{text}", colorscale=[[0, "#141b2d"], [1, "#00d4ff"]],
             showscale=False), row=1, col=i)
     fig.update_layout(height=340)
-    st.plotly_chart(dark_fig(fig, 340, False), use_container_width=True,
+    st.plotly_chart(dark_fig(fig, 340, False), width="stretch",
                     config={"displayModeBar": False})
 
     sec("05", "ROC CURVES")
@@ -971,7 +971,7 @@ def page_lab(df):
     fig.update_layout(xaxis=dict(title="False positive rate"),
                       yaxis=dict(title="True positive rate"),
                       height=400)
-    st.plotly_chart(dark_fig(fig, 400), use_container_width=True,
+    st.plotly_chart(dark_fig(fig, 400), width="stretch",
                     config={"displayModeBar": False})
 
     sec("06", "FEATURE SELECTION & IMPORTANCE")
@@ -987,7 +987,7 @@ def page_lab(df):
             marker=dict(color=[CYAN if s else "rgba(148,163,184,0.35)"
                                for s in show["sel"]])))
         fig.update_layout(height=560, margin=dict(l=10, r=30, t=20, b=8))
-        st.plotly_chart(dark_fig(fig, 560, False), use_container_width=True,
+        st.plotly_chart(dark_fig(fig, 560, False), width="stretch",
                         config={"displayModeBar": False})
         st.caption("Cyan = kept by SelectKBest (top 20).")
     with c2:
@@ -999,13 +999,13 @@ def page_lab(df):
             orientation="h", marker=dict(color=PURPLE, opacity=0.9),
             text=[f"{v:.3f}" for _, v in imp], textposition="outside"))
         fig.update_layout(height=560, margin=dict(l=10, r=52, t=20, b=8))
-        st.plotly_chart(dark_fig(fig, 560, False), use_container_width=True,
+        st.plotly_chart(dark_fig(fig, 560, False), width="stretch",
                         config={"displayModeBar": False})
         st.caption("Notebook's top drivers — Online boarding, Inflight wifi, "
                    "Business travel, Business class — rank the same way here.")
 
     sec("07", "ACTUAL VS PREDICTED (SAMPLE)")
-    st.dataframe(tp["avp"], use_container_width=True, height=460)
+    st.dataframe(tp["avp"], width="stretch", height=460)
 
 
 # ============================================================
@@ -1073,7 +1073,7 @@ def page_predict(df):
                                     key=f"pf_{i}")
         st.markdown("</div>", unsafe_allow_html=True)
 
-        btn = st.button("PREDICT SATISFACTION", use_container_width=True,
+        btn = st.button("PREDICT SATISFACTION", width="stretch",
                         type="primary")
         st.markdown(
             """<style>div[data-testid="stButton"] > button {
